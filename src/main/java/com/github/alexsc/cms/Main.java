@@ -69,9 +69,11 @@ public class Main {
                         .build(contentSigner, certHolder)
         );
 
-        // Add the certificate to the generator
+        // Add the certificate chain to the generator
         List<X509CertificateHolder> certList = new ArrayList<>();
-        certList.add(certHolder);
+        for (var cert : certificateChain) {
+            certList.add(new JcaX509CertificateHolder((X509Certificate) cert));
+        }
         Store<?> certs = new JcaCertStore(certList);
         cmsGenerator.addCertificates(certs);
 
